@@ -3,6 +3,10 @@ import axios from 'axios';
 import { X as CloseIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Link } from '../types';
+// For example, in AddLinkModal.tsx
+import { api } from '../utils/api';
+
+// Then replace axios calls like this:
 
 interface AddLinkModalProps {
   isOpen: boolean;
@@ -31,10 +35,9 @@ const AddLinkModal: React.FC<AddLinkModalProps> = ({ isOpen, onClose, onAddLink 
     setIsLoading(true);
     
     try {
-      const response = await axios.post(
-        `${API_URL}/links`,
-        { title, url, description, tags },
-        { withCredentials: true }
+      const response = await api.post(
+        '/links',  // Note: no need for API_URL prefix now
+        { title, url, description, tags }
       );
       
       onAddLink(response.data);

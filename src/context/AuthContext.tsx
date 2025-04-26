@@ -2,6 +2,7 @@ import React, { createContext, useContext, useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { api } from '../utils/api';
 
 interface User {
   _id: string;
@@ -33,7 +34,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   
-  const API_URL = 'https://linkvault-backend-5buj.onrender.com/api';
+
 
   useEffect(() => {
     checkAuth();
@@ -42,7 +43,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const checkAuth = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/auth/me`, { withCredentials: true });
+      const response = await axios.get(`${api}/auth/me`, { withCredentials: true });
       setUser(response.data);
     } catch (error) {
       setUser(null);
@@ -55,7 +56,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       const response = await axios.post(
-        `${API_URL}/auth/login`, 
+        `${api}/auth/login`, 
         { email, password },
         { withCredentials: true }
       );
@@ -74,7 +75,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setLoading(true);
       const response = await axios.post(
-        `${API_URL}/auth/signup`, 
+        `${api}/auth/signup`, 
         { name, email, password },
         { withCredentials: true }
       );
@@ -91,7 +92,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const logout = async () => {
     try {
-      await axios.post(`${API_URL}/auth/logout`, {}, { withCredentials: true });
+      await axios.post(`${api}/auth/logout`, {}, { withCredentials: true });
       setUser(null);
       toast.success('Logged out successfully');
       navigate('/login');

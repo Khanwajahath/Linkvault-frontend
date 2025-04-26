@@ -7,6 +7,7 @@ import AddLinkModal from '../components/AddLinkModal';
 import TagFilter from '../components/TagFilter';
 import { Link as LinkType } from '../types';
 import LoadingSpinner from '../components/LoadingSpinner';
+import { api } from '../utils/api';
 
 const Dashboard: React.FC = () => {
   const [links, setLinks] = useState<LinkType[]>([]);
@@ -17,7 +18,7 @@ const Dashboard: React.FC = () => {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const [allTags, setAllTags] = useState<string[]>([]);
   
-  const API_URL = 'https://linkvault-backend-5buj.onrender.com/api';
+  
 
   useEffect(() => {
     fetchLinks();
@@ -54,7 +55,7 @@ const Dashboard: React.FC = () => {
   const fetchLinks = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`${API_URL}/links`, { withCredentials: true });
+      const response = await axios.get(`${api}/links`, { withCredentials: true });
       setLinks(response.data);
       setFilteredLinks(response.data);
     } catch (error) {
@@ -71,7 +72,7 @@ const Dashboard: React.FC = () => {
 
   const handleDeleteLink = async (id: string) => {
     try {
-      await axios.delete(`${API_URL}/links/${id}`, { withCredentials: true });
+      await axios.delete(`${api}/links/${id}`, { withCredentials: true });
       setLinks(prevLinks => prevLinks.filter(link => link._id !== id));
       toast.success('Link deleted successfully!');
     } catch (error) {
